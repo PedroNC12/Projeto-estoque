@@ -88,26 +88,68 @@ public class InsertProduto extends JFrame {
 		JButton btnSalvar = new JButton("Salvar");
 		btnSalvar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				String quantidade = textField_1.getText();
+				//Boolean para checar se os dados estão de acordo para enviar para o banco
+				boolean check = true;
 				
+				textField_3.setVisible(false);
+				textField_4.setVisible(false);
+				
+				//Checar se a quantidade possui apenas números
+				for(int i = 0; i<quantidade.length(); i++) {
+					char c = quantidade.charAt(i);
+					
+					
+					switch(c) {
+					case '0':
+						break;
+					case '1':
+						break;
+					case '2':
+						break;
+					case '3':
+						break;
+					case '4':
+						break;
+					case '5':
+						break;
+					case '6':
+						break;
+					case '7':
+						break;
+					case '8':
+						break;
+					case '9':
+						break;
+					default:
+						check = false;
+						textField_2.setText("*Apenas números permitidos");
+						textField_4.setVisible(true);
+					}
+				}
 				
 				//Checar se algum dos valores não está preenchido
 				if(textField.getText().isBlank()) {
 					textField_2.setVisible(true);
-					textField_2.setText("Nome obrigatório");
+					textField_2.setText("*Campo obrigatório");
 					textField_3.setVisible(true);
+					check = false;
 				}
-				else if(textField_1.getText().isBlank()) {
+				if(quantidade.isBlank()) {
 					textField_2.setVisible(true);
-					textField_2.setText("Quantidade obrigatória");
+					textField_2.setText("*Campo obrigatório");
 					textField_4.setVisible(true);
+					check = false;
 				}
 				//checar se no banco já possui um item com o mesmo nome
-				else if(dao.visualizarProduto(textField.getText()).getNome()!=null) {
+				if(dao.visualizarProduto(textField.getText()).getNome()!=null&&check==true) {
 					textField_2.setVisible(true);
 					textField_2.setText("Nome deve ser exclusivo");
+					check = false;
 				}
+				
 				//Inserir o produto no banco desde que esteja tudo certo
-				else {
+				if(check==true){
 				//Pegar o nome e a quantidade a serem adicionadas ao banco
 				produto.setNome(textField.getText());
 				produto.setQuantidade(Integer.parseInt(textField_1.getText()));
