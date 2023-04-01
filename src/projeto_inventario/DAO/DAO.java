@@ -220,15 +220,6 @@ public class DAO {
 		}
 	}
 	
-	public static void main(String[] args) {
-		DAO dao = new DAO();
-		Produto prod = new Produto();
-		
-		dao.deleteProduto(35);
-		
-		for(Produto i : dao.listarProdutos()) {
-			System.out.println(i.getId() +" " +i.getNome() +" " +i.getQuantidade());
-		}
 	}
 
-}
+

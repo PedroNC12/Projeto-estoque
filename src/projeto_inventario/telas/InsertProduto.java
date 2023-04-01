@@ -1,11 +1,13 @@
 package projeto_inventario.telas;
 
+import java.awt.Color;
 import java.awt.EventQueue;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 import java.awt.GridLayout;
 import javax.swing.JButton;
@@ -32,6 +34,9 @@ public class InsertProduto extends JFrame {
 	private JTextField textField_1;
 	private DAO dao = new DAO();
 	private Produto produto = new Produto();
+	private JTextField textField_2;
+	private JTextField textField_3;
+	private JTextField textField_4;
 
 	/**
 	 * Launch the application.
@@ -53,8 +58,9 @@ public class InsertProduto extends JFrame {
 	 * Create the frame.
 	 */
 	public InsertProduto() {
+		setTitle("Inserir produto");
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-		setBounds(100, 100, 294, 141);
+		setBounds(100, 100, 294, 154);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 
@@ -82,10 +88,38 @@ public class InsertProduto extends JFrame {
 		JButton btnSalvar = new JButton("Salvar");
 		btnSalvar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				
+				
+				//Checar se algum dos valores não está preenchido
+				if(textField.getText().isBlank()) {
+					textField_2.setVisible(true);
+					textField_2.setText("Nome obrigatório");
+					textField_3.setVisible(true);
+				}
+				else if(textField_1.getText().isBlank()) {
+					textField_2.setVisible(true);
+					textField_2.setText("Quantidade obrigatória");
+					textField_4.setVisible(true);
+				}
+				//checar se no banco já possui um item com o mesmo nome
+				else if(dao.visualizarProduto(textField.getText()).getNome()!=null) {
+					textField_2.setVisible(true);
+					textField_2.setText("Nome deve ser exclusivo");
+				}
+				//Inserir o produto no banco desde que esteja tudo certo
+				else {
+				//Pegar o nome e a quantidade a serem adicionadas ao banco
 				produto.setNome(textField.getText());
 				produto.setQuantidade(Integer.parseInt(textField_1.getText()));
 				
 				dao.insert(produto);
+				textField_2.setVisible(true);
+				textField_2.setText("Sucesso");
+				textField_3.setVisible(false);
+				textField_4.setVisible(false);
+				}
+				
+				
 			}
 		});
 		btnSalvar.setBounds(12, 70, 117, 25);
@@ -96,9 +130,40 @@ public class InsertProduto extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				textField.setText("");
 				textField_1.setText("");
+				textField_2.setVisible(false);
+				textField_3.setVisible(false);
+				textField_4.setVisible(false);
 			}
 		});
 		btnCancelar.setBounds(153, 70, 117, 25);
 		contentPane.add(btnCancelar);
+		
+		textField_2 = new JTextField();
+		textField_2.setEditable(false);
+		textField_2.setBorder(null);
+		textField_2.setVisible(false);
+		textField_2.setBounds(57, 98, 186, 19);
+		contentPane.add(textField_2);
+		textField_2.setColumns(10);
+		
+		textField_3 = new JTextField();
+		textField_3.setBounds(137, 10, 16, 19);
+		contentPane.add(textField_3);
+		textField_3.setColumns(10);
+		textField_3.setEditable(false);
+		textField_3.setBorder(null);
+		textField_3.setVisible(false);
+		textField_3.setForeground(new Color(240, 0, 0));
+		textField_3.setText("*");
+		
+		textField_4 = new JTextField();
+		textField_4.setBounds(137, 37, 16, 19);
+		contentPane.add(textField_4);
+		textField_4.setColumns(10);
+		textField_4.setEditable(false);
+		textField_4.setBorder(null);
+		textField_4.setVisible(false);
+		textField_4.setForeground(new Color(240, 0, 0));
+		textField_4.setText("*");
 	}
 }
